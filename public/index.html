@@ -1,0 +1,75 @@
+<!doctype html>
+<!-- THESIS: The island is the interface; gathering and building happen in a shared place, not a dashboard.
+OWN-WORLD: Original low-poly voxel forest, with Clawpilot field-console panels and rose action keys.
+STORY: Choose a camp, learn two-thumb controls, build shelter, and restore the keep with three wild relics.
+FIRST VIEWPORT: Full-bleed live world behind a compact room picker; the play HUD leaves the centre unobstructed.
+FORM: Experience-first field console, touch controls at the lower corners. Brief-pinned world; no Node seed runtime. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#3d3b3a">
+  <title>Wildwood Keep — shared island survival</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <canvas id="world" aria-label="Wildwood Keep three-dimensional game world"></canvas>
+  <div id="shade"></div>
+  <main id="lobby">
+    <section class="welcome">
+      <div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></div>
+      <h1>Wildwood<br><span>Keep</span></h1>
+      <p class="intro">A little wilderness.<br>A world you build together.</p>
+      <p>Gather in the forest. Swim the lake. Build before nightfall.<br class="wide"> Bring home three wild relics and light the keep beacon.</p>
+      <fieldset id="rooms"><legend>Choose a shared camp</legend>
+        <button class="room selected" data-room="FERN" aria-pressed="true">FERN<span>Forest camp</span></button>
+        <button class="room" data-room="TIDE" aria-pressed="false">TIDE<span>Lake camp</span></button>
+        <button class="room" data-room="EMBER" aria-pressed="false">EMBER<span>Evening camp</span></button>
+      </fieldset>
+      <button id="play" class="primary">Enter the wild <span aria-hidden="true">→</span></button>
+      <p id="lobby-status" role="status">Friends: choose the same camp on the same server.</p>
+      <button id="lobby-help" class="quiet">How to play &amp; connect</button>
+    </section>
+    <aside class="lobby-note"><span class="live-dot"></span> A shared island for up to 8 scouts<br>Original voxel survival · Made for two thumbs</aside>
+  </main>
+  <div id="hud" hidden>
+    <header class="topbar">
+      <div class="camp"><strong id="room-label">FERN</strong><span id="connection">Connecting</span></div>
+      <div class="vitals"><div><label for="health">Health</label><meter id="health" min="0" max="100" value="100"></meter><b id="health-text">100</b></div>
+        <div><label for="food">Food</label><meter id="food" min="0" max="100" value="100"></meter><b id="food-text">100</b></div></div>
+      <div class="day"><strong id="day-label">Day 1</strong><span id="time-left"></span></div>
+      <button id="help" aria-label="Open game help">?</button>
+      <button id="leave" aria-label="Leave camp">Exit</button>
+    </header>
+    <div id="objective">Restore the keep · <span id="relic-count">0</span> / 3 relics</div>
+    <div id="boss-hud" hidden><strong id="boss-name"></strong><meter id="boss-health" min="0" max="200"></meter><span id="boss-attack"></span></div>
+    <div id="oxygen" hidden>Air <meter id="air" min="0" max="100" value="100"></meter> Hold Rise to surface</div>
+    <div id="crosshair" aria-hidden="true">+</div><div id="target"></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div class="utility"><button id="pack">Pack <span>12 slots</span></button><button id="craft">Craft <span>7 recipes</span></button><button id="forage">Forage <span>Berries</span></button></div>
+    <div id="joystick" aria-label="Movement joystick"><div id="stick"></div><span>MOVE</span></div>
+    <div id="look-hint">Drag the world to look</div>
+    <div class="actions">
+      <button id="open" class="small-action">Open<span>Treasure</span></button>
+      <button id="jump" class="small-action">Rise<span>Jump / swim</span></button>
+      <button id="place">Build<span>Place block</span></button>
+      <button id="mine" class="primary">Strike<span>Mine / attack</span></button>
+    </div>
+    <nav id="hotbar" aria-label="Quick inventory slots"></nav>
+    <div id="location"></div>
+  </div>
+  <dialog id="panel">
+    <div class="panel-head"><h2 id="panel-title">Field guide</h2><button id="close-panel" aria-label="Close panel">Close ×</button></div>
+    <div id="panel-body"></div>
+  </dialog>
+  <script type="module" src="/assets/client.js"></script>
+</body>
+</html>
